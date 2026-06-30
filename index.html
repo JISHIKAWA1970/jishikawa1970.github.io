@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="LUMOは、注文、人、仕入れ、評判、証憑、経営数字をひとつにつなぐ、飲食店のための経営基盤です。" />
+  <title>LUMO SUITE｜Executive Summary</title>
+  <style>
+    :root {
+      --bg: #061018;
+      --bg-2: #0a1721;
+      --panel: rgba(255,255,255,.055);
+      --panel-2: rgba(255,255,255,.085);
+      --line: rgba(255,255,255,.12);
+      --text: #f4f8fb;
+      --muted: #a5b5bf;
+      --muted-2: #778a96;
+      --aqua: #5ef2c8;
+      --blue: #67b7ff;
+      --violet: #b99cff;
+      --amber: #ffd37a;
+      --rose: #ff9db6;
+      --green: #94ec88;
+      --max: 1160px;
+      --radius: 28px;
+      --shadow: 0 28px 80px rgba(0,0,0,.34);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 13% 4%, rgba(94,242,200,.15), transparent 29%),
+        radial-gradient(circle at 88% 8%, rgba(103,183,255,.14), transparent 30%),
+        radial-gradient(circle at 48% 58%, rgba(185,156,255,.07), transparent 34%),
+        var(--bg);
+      font-family: "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", system-ui, sans-serif;
+      line-height: 1.75;
+      letter-spacing: .025em;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(6,16,24,.72);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      backdrop-filter: blur(18px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(94,242,200,.48);
+      background: radial-gradient(circle, rgba(94,242,200,.24), rgba(94,242,200,.02) 68%);
+      box-shadow: 0 0 26px rgba(94,242,200,.22);
+    }
+    .brand-mark::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 14px #fff, 0 0 26px var(--aqua);
+    }
+    .nav-note { color: var(--muted-2); font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+
+    .hero {
+      min-height: calc(100svh - 72px);
+      display: grid;
+      align-items: center;
+      padding: 72px 0 64px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+      box-shadow: 0 0 14px currentColor;
+    }
+    h1 {
+      margin: 24px 0 26px;
+      font-size: clamp(48px, 6.5vw, 88px);
+      line-height: 1.08;
+      letter-spacing: -.048em;
+      font-weight: 900;
+    }
+    h1 span {
+      display: block;
+      color: transparent;
+      background: linear-gradient(115deg, #fff 6%, var(--aqua) 48%, var(--blue) 82%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .hero-copy {
+      max-width: 710px;
+      color: #c6d2d9;
+      font-size: clamp(16px, 1.55vw, 20px);
+      line-height: 2;
+    }
+    .hero-copy strong { color: #fff; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 34px; }
+    .button {
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      transition: .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary {
+      color: #03120d;
+      background: linear-gradient(135deg, #e6fff8, var(--aqua));
+      box-shadow: 0 12px 34px rgba(94,242,200,.18);
+    }
+    .button-secondary { color: #e7eef2; border: 1px solid var(--line); background: rgba(255,255,255,.035); }
+
+    .proofs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 42px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .proof { padding: 18px 18px 17px 0; }
+    .proof + .proof { padding-left: 18px; border-left: 1px solid var(--line); }
+    .proof b { display: block; font-size: 21px; line-height: 1.25; }
+    .proof span { color: var(--muted-2); font-size: 11px; }
+
+    .system-map {
+      position: relative;
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+    .system-map::before,
+    .system-map::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .system-map::before { width: 430px; height: 430px; border-style: dashed; }
+    .system-map::after { width: 270px; height: 270px; box-shadow: inset 0 0 70px rgba(94,242,200,.05); }
+    .core {
+      width: 180px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      z-index: 3;
+      border: 1px solid rgba(94,242,200,.4);
+      background: radial-gradient(circle, rgba(94,242,200,.18), rgba(94,242,200,.035) 62%, rgba(255,255,255,.02));
+      box-shadow: 0 0 76px rgba(94,242,200,.14), inset 0 0 30px rgba(94,242,200,.08);
+    }
+    .core b { display: block; font-size: 24px; letter-spacing: .14em; }
+    .core small { color: var(--muted); font-size: 11px; }
+    .node {
+      position: absolute;
+      width: 126px;
+      min-height: 72px;
+      padding: 11px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      z-index: 4;
+      background: rgba(8,21,30,.92);
+      border: 1px solid var(--line);
+      box-shadow: 0 15px 36px rgba(0,0,0,.27);
+    }
+    .node::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      margin-bottom: 4px;
+      border-radius: 50%;
+      background: var(--node);
+      box-shadow: 0 0 14px var(--node);
+    }
+    .node b { display: block; font-size: 13px; letter-spacing: .08em; }
+    .node small { color: var(--muted); font-size: 10px; }
+    .n1 { --node: var(--aqua); top: 2%; left: 50%; transform: translateX(-50%); }
+    .n2 { --node: var(--blue); top: 21%; right: 0; }
+    .n3 { --node: var(--violet); bottom: 11%; right: 8%; }
+    .n4 { --node: var(--rose); bottom: 11%; left: 8%; }
+    .n5 { --node: var(--amber); top: 21%; left: 0; }
+    .n6 { --node: var(--green); bottom: -1%; left: 50%; transform: translateX(-50%); }
+
+    section { padding: 92px 0; }
+    .section-head { max-width: 840px; margin-bottom: 38px; }
+    .section-head h2 {
+      margin: 18px 0 16px;
+      font-size: clamp(34px, 4.5vw, 58px);
+      line-height: 1.2;
+      letter-spacing: -.035em;
+    }
+    .section-head p { margin: 0; color: var(--muted); font-size: 16px; }
+
+    .difference {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .diff-card {
+      min-height: 250px;
+      padding: 28px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(150deg, var(--panel-2), var(--panel));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .diff-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -70px;
+      top: -70px;
+      border-radius: 50%;
+      background: var(--accent);
+      filter: blur(55px);
+      opacity: .16;
+    }
+    .diff-num { color: var(--accent); font-size: 11px; font-weight: 900; letter-spacing: .14em; }
+    .diff-card h3 { margin: 18px 0 14px; font-size: 23px; line-height: 1.5; }
+    .diff-card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .summary-panel {
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(94,242,200,.075), transparent 35%),
+        linear-gradient(225deg, rgba(103,183,255,.065), transparent 38%),
+        rgba(255,255,255,.035);
+      padding: 42px;
+      box-shadow: var(--shadow);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 42px;
+      align-items: center;
+    }
+    .summary-panel h2 { margin: 16px 0 18px; font-size: clamp(34px, 4vw, 54px); line-height: 1.22; letter-spacing: -.035em; }
+    .summary-panel p { color: var(--muted); margin: 0; }
+    .roadmap { display: grid; gap: 12px; }
+    .road {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 17px 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.038);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .road b { color: var(--road); font-size: 11px; letter-spacing: .12em; }
+    .road strong { display: block; font-size: 15px; margin-bottom: 4px; }
+    .road span { color: var(--muted-2); font-size: 12px; }
+
+    .closing {
+      padding: 96px 0 106px;
+      text-align: center;
+    }
+    .closing-box {
+      max-width: 930px;
+      margin: auto;
+      padding: 58px 40px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(94,242,200,.22);
+      background: radial-gradient(circle at 50% 5%, rgba(94,242,200,.12), transparent 44%), rgba(255,255,255,.035);
+      box-shadow: var(--shadow);
+    }
+    .closing h2 { margin: 18px 0 20px; font-size: clamp(38px, 5vw, 64px); line-height: 1.18; letter-spacing: -.04em; }
+    .closing p { max-width: 720px; margin: 0 auto 30px; color: var(--muted); font-size: 16px; }
+    .closing-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 22px 0 28px;
+      color: var(--muted-2);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+
+    @media (max-width: 920px) {
+      .hero { min-height: auto; }
+      .hero-grid, .summary-grid { grid-template-columns: 1fr; }
+      .system-map { max-width: 600px; width: 100%; margin: auto; }
+      .difference { grid-template-columns: 1fr; }
+      .diff-card { min-height: auto; }
+    }
+    @media (max-width: 620px) {
+      .container { width: min(calc(100% - 26px), var(--max)); }
+      .nav-note { display: none; }
+      .hero { padding: 54px 0 42px; }
+      h1 { font-size: clamp(42px, 13vw, 62px); }
+      .proofs { grid-template-columns: repeat(2, 1fr); }
+      .proof:nth-child(3) { border-left: 0; border-top: 1px solid var(--line); }
+      .proof:nth-child(4) { border-top: 1px solid var(--line); }
+      .system-map { min-height: 430px; transform: scale(.9); }
+      .system-map::before { width: 340px; height: 340px; }
+      .system-map::after { width: 230px; height: 230px; }
+      .core { width: 150px; }
+      .node { width: 106px; min-height: 64px; padding: 9px; }
+      .n2 { right: -4%; }
+      .n5 { left: -4%; }
+      section { padding: 70px 0; }
+      .summary-panel { padding: 28px 22px; }
+      .road { grid-template-columns: 74px 1fr; gap: 12px; }
+      .closing-box { padding: 44px 22px; }
+      .footer-inner { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <div class="container nav">
+      <a href="#top" class="brand" aria-label="LUMO トップへ">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>LUMO SUITE</span>
+      </a>
+      <span class="nav-note">EXECUTIVE SUMMARY</span>
+    </div>
+  </div>
+
+  <main id="top">
+    <header class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Restaurant Operating System</span>
+          <h1>店を、<span>ひとつの生命体として動かす。</span></h1>
+          <p class="hero-copy">
+            LUMOは、注文、人、仕入れ、評判、証憑、経営数字をひとつにつなぐ、<strong>飲食店のための経営基盤</strong>です。<br>
+            人を減らすためではなく、働く人が店らしい仕事に集中できる状態をつくります。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#difference">LUMOの違いを見る <span aria-hidden="true">↓</span></a>
+            <a class="button button-secondary" href="#future">現在地と未来</a>
+          </div>
+          <div class="proofs" aria-label="実運用実績">
+            <div class="proof"><b>6領域</b><span>店の経営を横断</span></div>
+            <div class="proof"><b>4業態</b><span>自店舗で実運用</span></div>
+            <div class="proof"><b>1,100+</b><span>会員データ</span></div>
+            <div class="proof"><b>3,700+</b><span>クチコミ運用</span></div>
+          </div>
+        </div>
+
+        <div class="system-map" aria-label="LUMOを中心に6製品がつながる概念図">
+          <div class="core"><div><b>LUMO</b><small>店を照らす経営基盤</small></div></div>
+          <div class="node n1"><b>FIGARO</b><small>注文・会計</small></div>
+          <div class="node n2"><b>HITOME</b><small>売上・経営</small></div>
+          <div class="node n3"><b>MITORI</b><small>証憑・経理</small></div>
+          <div class="node n4"><b>FRONTCAST</b><small>評判・公開接客</small></div>
+          <div class="node n5"><b>MISE</b><small>レシピ・仕入</small></div>
+          <div class="node n6"><b>OHITO</b><small>人事・労務</small></div>
+        </div>
+      </div>
+    </header>
+
+    <section id="difference">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Why LUMO</span>
+          <h2>ソフトを増やすのではなく、<br>店の経営をつなぎ直す。</h2>
+          <p>LUMOの価値は、六つの製品があることではありません。店で起きる出来事が、次の判断へ自然につながることです。</p>
+        </div>
+
+        <div class="difference">
+          <article class="diff-card" style="--accent: var(--aqua)">
+            <span class="diff-num">01 / BUILT IN THE FIELD</span>
+            <h3>評論ではなく、<br>実店舗で鍛えた。</h3>
+            <p>飲食店を実際に経営する私たちが、自分たちの不便を解くために開発。毎日の営業が、そのまま検証と改善になります。</p>
+          </article>
+          <article class="diff-card" style="--accent: var(--blue)">
+            <span class="diff-num">02 / ONE CONNECTED VIEW</span>
+            <h3>売上・人・原価・評判を、<br>別々に見ない。</h3>
+            <p>注文から経営数字までを一つの流れとして捉え、同じ情報の再入力や、部門ごとの分断を減らします。</p>
+          </article>
+          <article class="diff-card" style="--accent: var(--violet)">
+            <span class="diff-num">03 / HUMAN-CENTERED</span>
+            <h3>人を置き換えず、<br>人を照らす。</h3>
+            <p>AIや自動化は判断を奪うためではなく、人が接客・気づき・成長に時間を使うために置かれます。最終判断は人が行います。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="future">
+      <div class="container">
+        <div class="summary-panel">
+          <div class="summary-grid">
+            <div>
+              <span class="eyebrow">Now and Next</span>
+              <h2>すでに動いている。<br>そして、まだ途中にいる。</h2>
+              <p>現在地を正確に示しながら、LUMOは「数字を見せる道具」から、「経営者が見るべき場所を照らす道具」へ進みます。</p>
+            </div>
+            <div class="roadmap">
+              <div class="road" style="--road: var(--aqua)">
+                <b>NOW</b>
+                <div><strong>主要6領域を自店舗で実運用</strong><span>注文・人事・仕入れ・評判・証憑・売上</span></div>
+              </div>
+              <div class="road" style="--road: var(--blue)">
+                <b>NEXT</b>
+                <div><strong>製品間のデータ連携を深化</strong><span>再入力を減らし、経営全体を横断表示</span></div>
+              </div>
+              <div class="road" style="--road: var(--violet)">
+                <b>VISION</b>
+                <div><strong>異変から、見るべき問いを示す</strong><span>AIは答えを決めず、経営判断を照らす</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="container">
+        <div class="closing-box">
+          <span class="eyebrow">LUMO Philosophy</span>
+          <h2>テクノロジーが前に出るのではなく、<br>店と人の魅力が、今よりよく見える。</h2>
+          <p>LUMOという名は、光を意味する <strong>lumen</strong> から。人にしか生み出せない個性と、経営に必要な合理性を両立させます。</p>
+          <div class="closing-actions">
+            <a class="button button-primary" href="/lumo/lineup/">詳細版を見る <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#top">ページ上部へ <span aria-hidden="true">↑</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>LUMO SUITE / J.ISHIKAWA SYSTEMS</span>
+      <span>Developed and operated in BIGOLI Group restaurants.</span>
+    </div>
+  </footer>
+</body>
+</html>
