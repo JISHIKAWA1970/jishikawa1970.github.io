@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会員台帳 — BIGOLI GROUP</title>
+<style>
+  :root { --main: #406AAF; --bg: #f5f7fa; --line: #d9e0ea; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: #223;
+    font-family: -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 14px;
+  }
+  header {
+    background: var(--main); color: #fff; padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  .badge {
+    background: rgba(255,255,255,.2); border-radius: 10px;
+    padding: 2px 8px; font-size: 11px;
+  }
+  header .spacer { flex: 1; }
+  header button { background: rgba(255,255,255,.15); color: #fff; border: none; }
+  main { max-width: 960px; margin: 0 auto; padding: 16px; }
+  .card {
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 16px; margin-bottom: 16px;
+  }
+  h2 { font-size: 14px; margin: 0 0 12px; color: var(--main); }
+  label { display: block; font-size: 12px; color: #567; margin: 8px 0 2px; }
+  input, select, textarea {
+    width: 100%; padding: 7px 9px; border: 1px solid var(--line);
+    border-radius: 6px; font-size: 14px; font-family: inherit;
+  }
+  button {
+    background: var(--main); color: #fff; border: none; border-radius: 6px;
+    padding: 8px 14px; font-size: 13px; cursor: pointer; font-family: inherit;
+  }
+  button.ghost { background: #fff; color: var(--main); border: 1px solid var(--main); }
+  button:disabled { opacity: .5; cursor: default; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 140px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .tabs button { background: #fff; color: #567; border: 1px solid var(--line); }
+  .tabs button.on { background: var(--main); color: #fff; border-color: var(--main); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  th { color: #567; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  tr:hover td { background: #f2f6fb; }
+  .muted { color: #89a; font-size: 12px; }
+  .pill { border-radius: 10px; padding: 1px 8px; font-size: 11px; white-space: nowrap; }
+  .pill.sent { background: #e3efe3; color: #2c6e2c; }
+  .pill.error { background: #f7e3e3; color: #a33; }
+  .pill.redeemed { background: #e3eaf7; color: var(--main); }
+  .toast {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: #223; color: #fff; padding: 9px 16px; border-radius: 8px;
+    font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  #loginCard { max-width: 360px; margin: 60px auto; }
+  dialog {
+    border: 1px solid var(--line); border-radius: 10px; padding: 20px;
+    width: min(480px, 92vw);
+  }
+  dialog::backdrop { background: rgba(20,30,50,.4); }
+  .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+  /* ---- ダッシュボード ---- */
+  .storebar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .storebar button { background: #fff; color: #567; border: 1px solid var(--line);
+    border-radius: 20px; padding: 6px 16px; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .storebar button.on { background: #2E5188; color: #fff; border-color: #2E5188; }
+  .tiles { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tile { flex: 1; min-width: 130px; background: #fff; border: 1px solid var(--line);
+    border-radius: 8px; padding: 12px 14px; }
+  .tile .k { font-size: 12px; color: #678; letter-spacing: .04em; }
+  .tile .v { font-size: 26px; font-weight: 650; color: #2E5188; line-height: 1.35; }
+  .tile .v small { font-size: 13px; font-weight: 500; color: #789; margin-left: 2px; }
+  .dcard { background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 16px; margin-bottom: 14px; }
+  .dcard h3 { font-size: 13px; margin: 0 0 10px; color: var(--main);
+    display: flex; align-items: center; gap: 8px; }
+  .statuspill { border-radius: 10px; padding: 2px 10px; font-size: 12px; font-weight: 600; }
+  .statuspill.on { background: #e3efe3; color: #2c6e2c; }
+  .statuspill.off { background: #fbecec; color: #a33; }
+  .snsblock { margin-bottom: 12px; }
+  .snsblock .lbl { font-size: 12px; color: #678; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: space-between; }
+  .snsblock textarea { width: 100%; height: 128px; resize: vertical; font-size: 13px;
+    line-height: 1.6; color: #223; background: #fafcff; }
+  .copybtn { font-size: 12px; padding: 4px 12px; }
+  .linkbtn { display: inline-block; text-decoration: none; background: #fff;
+    color: var(--main); border: 1px solid var(--main); border-radius: 6px;
+    padding: 8px 14px; font-size: 13px; margin: 4px 6px 0 0; }
+  .bar { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 13px; }
+  .bar .barlabel { width: 70px; color: #567; }
+  .bar .barfill { height: 11px; background: #8fb0dd; border-radius: 3px; }
+  .bar .barnum { color: #234; font-variant-numeric: tabular-nums; }
+  .ratio { display: flex; height: 22px; border-radius: 5px; overflow: hidden; margin: 4px 0 2px; }
+  .ratio .male { background: #6f9bd8; }
+  .ratio .female { background: #d98bb0; }
+  .ratio .other { background: #b9c3ce; }
+  .ratio span { color: #fff; font-size: 11px; display: flex; align-items: center;
+    justify-content: center; }
+  .dhint { font-size: 12px; color: #89a; margin-top: 6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BIGOLI グループ 会員ダッシュボード</h1><span class="badge">v0.4.0</span>
+  <span class="spacer"></span>
+  <button id="logoutBtn" hidden>ログアウト</button>
+</header>
+<main>
+
+  <div class="card" id="loginCard">
+    <h2>管理者ログイン</h2>
+    <label>メールアドレス</label>
+    <input id="loginEmail" type="email" autocomplete="username">
+    <label>パスワード</label>
+    <input id="loginPass" type="password" autocomplete="current-password">
+    <div class="actions"><button id="loginBtn">ログイン</button></div>
+  </div>
+
+  <div id="app" hidden>
+    <div class="tabs">
+      <button data-tab="dashboard" class="on">ダッシュボード</button>
+      <button data-tab="members">会員一覧</button>
+      <button data-tab="birthdays">今月の誕生日</button>
+      <button data-tab="logs">振る舞いログ</button>
+    </div>
+
+    <div id="tab-dashboard">
+      <div class="storebar" id="storeBar"></div>
+      <div class="tiles">
+        <div class="tile"><div class="k">会員数</div><div class="v" id="tMembers">—</div></div>
+        <div class="tile"><div class="k">今日の誕生日</div><div class="v" id="tToday">—</div></div>
+        <div class="tile"><div class="k" id="tMonthLabel">今月の誕生日</div><div class="v" id="tMonth">—</div></div>
+        <div class="tile"><div class="k">今月 振る舞い状 送信</div><div class="v" id="tSent">—</div></div>
+        <div class="tile"><div class="k">今月 お連れさま来店</div><div class="v" id="tRedeemed">—</div></div>
+      </div>
+
+      <div class="dcard" id="snsCard">
+        <h3>本日のSNS投稿</h3>
+        <div id="snsBody"><p class="muted">読み込み中…</p></div>
+      </div>
+
+      <div class="dcard">
+        <h3>振る舞い状（誕生日メール） <span id="inviteStatus"></span></h3>
+        <p class="muted" id="inviteDesc">—</p>
+        <div class="dhint">誕生月のご贔屓さんへ、誕生日当日 朝7時に自動送信します。</div>
+      </div>
+
+      <div class="dcard">
+        <h3 id="monthSummaryTitle">今月のご贔屓さん</h3>
+        <div id="genderRatio"></div>
+        <div id="ageBars" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="dcard">
+        <h3>クイックリンク</h3>
+        <a class="linkbtn" href="https://jishikawa1970.github.io/kotobuki/birthday/" target="_blank" rel="noopener">本日の投稿画像を開く</a>
+        <a class="linkbtn" href="#" id="toMembersLink">会員台帳を開く</a>
+        <a class="linkbtn" href="#" id="toBirthdaysLink">今月の誕生日一覧</a>
+      </div>
+    </div>
+
+    <div class="card" id="tab-members" hidden>
+      <div class="row" style="align-items:flex-end; margin-bottom:10px;">
+        <div style="flex:2;">
+          <label>検索 (名前・かな・メール)</label>
+          <input id="memberSearch" placeholder="例: 田中">
+        </div>
+        <div style="flex:0;"><button id="newMemberBtn">新規登録</button></div>
+      </div>
+      <table>
+        <thead><tr><th>名前</th><th>誕生日</th><th>メール</th><th>所属店</th><th></th></tr></thead>
+        <tbody id="memberRows"></tbody>
+      </table>
+      <p class="muted" id="memberCount"></p>
+    </div>
+
+    <div class="card" id="tab-birthdays" hidden>
+      <h2 id="birthdayTitle">今月の誕生日</h2>
+      <table>
+        <thead><tr><th>日</th><th>名前</th><th>メール</th><th>所属店</th><th>今年の送信</th></tr></thead>
+        <tbody id="birthdayRows"></tbody>
+      </table>
+      <p class="muted">メール未登録の方には振る舞い状は届きません。ご来店時にそっとお伺いを。</p>
+    </div>
+
+    <div class="card" id="tab-logs" hidden>
+      <h2>振る舞い状ログ (直近 50 件)</h2>
+      <table>
+        <thead><tr><th>送信日</th><th>名前</th><th>招待番号</th><th>状態</th><th>消込</th></tr></thead>
+        <tbody id="logRows"></tbody>
+      </table>
+      <p class="muted">お連れさまが来店されたら「消込」を押してください。月次サマリーの実績に反映されます。</p>
+    </div>
+  </div>
+
+  <dialog id="memberDialog">
+    <h2 id="dialogTitle">会員の登録</h2>
+    <div class="row">
+      <div><label>名前 *</label><input id="fName"></div>
+      <div><label>かな</label><input id="fKana"></div>
+    </div>
+    <div class="row">
+      <div><label>誕生日</label><input id="fBirthday" type="date"></div>
+      <div><label>所属店 *</label><select id="fStore"></select></div>
+    </div>
+    <label>メールアドレス</label>
+    <input id="fEmail" type="email">
+    <label>ニックネーム</label>
+    <input id="fNote">
+    <div class="actions">
+      <button class="ghost" id="cancelBtn">キャンセル</button>
+      <button id="saveBtn">保存</button>
+    </div>
+  </dialog>
+
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  // ★ デプロイ時に置換 (Supabase Dashboard > Settings > API)
+  const SUPABASE_URL = 'https://vxdkrdxzlvygmhxoftzq.supabase.co';
+  const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4ZGtyZHh6bHZ5Z21oeG9mdHpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTYwNDAsImV4cCI6MjA4NTk3MjA0MH0.y4O0AFYkrgVb7BxyY33pW9Szq6Ez-z5ITcUTGt3_MLA';
+
+  const sb = supabase.createClient(SUPABASE_URL, ANON_KEY);
+  const $ = (id) => document.getElementById(id);
+  let stores = new Map();
+  let editingId = null;
+
+  function toast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  // ---------- 認証 ----------
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) await enter();
+  }
+  $('loginBtn').onclick = async () => {
+    const { error } = await sb.auth.signInWithPassword({
+      email: $('loginEmail').value.trim(),
+      password: $('loginPass').value,
+    });
+    if (error) return toast('ログインできません: ' + error.message);
+    await enter();
+  };
+  $('logoutBtn').onclick = async () => {
+    await sb.auth.signOut();
+    location.reload();
+  };
+  async function enter() {
+    $('loginCard').hidden = true;
+    $('app').hidden = false;
+    $('logoutBtn').hidden = false;
+    await loadStores();
+    await Promise.all([loadDashboard(), loadMembers(), loadBirthdays(), loadLogs()]);
+  }
+
+  // ---------- タブ ----------
+  const TABS = ['dashboard', 'members', 'birthdays', 'logs'];
+  function showTab(name) {
+    document.querySelectorAll('.tabs button').forEach((x) => x.classList.toggle('on', x.dataset.tab === name));
+    TABS.forEach((t) => { $('tab-' + t).hidden = (t !== name); });
+  }
+  document.querySelectorAll('.tabs button').forEach((b) => { b.onclick = () => showTab(b.dataset.tab); });
+  $('toMembersLink').onclick = (e) => { e.preventDefault(); showTab('members'); };
+  $('toBirthdaysLink').onclick = (e) => { e.preventDefault(); showTab('birthdays'); };
+
+  // ---------- ダッシュボード ----------
+  const SOCIAL_API = SUPABASE_URL + '/functions/v1/birthday-social';
+  const SNS_STORE = 2; // SNS自動投稿の対象店 (壽)
+  let dash = null;      // 取得データのキャッシュ
+  let curStore = 'all'; // 'all' または store_id
+
+  function copyBtn(id, text) {
+    const b = $(id);
+    if (!b) return;
+    b.onclick = async () => {
+      try { await navigator.clipboard.writeText(text); toast('コピーしました'); }
+      catch { toast('コピーできませんでした（長押しで選択してください）'); }
+    };
+  }
+
+  async function loadDashboard() {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    const [mem, logs, sts, social] = await Promise.all([
+      sb.from('fg_patrons').select('birth_date, gender, is_deleted, home_store_id').not('birth_date', 'is', null).limit(5000),
+      sb.from('mb_birthday_invite_log').select('store_id, status, redeemed_at, created_at').gte('created_at', monthStart),
+      sb.from('fg_stores').select('id, name, birthday_invite_config').order('id'),
+      fetch(SOCIAL_API).then((r) => r.json()).catch(() => null),
+    ]);
+    dash = {
+      members: (mem.data ?? []).filter((m) => !m.is_deleted),
+      logs: logs.data ?? [],
+      stores: sts.data ?? [],
+      social: social,
+    };
+    buildStoreBar();
+    renderDashboard();
+  }
+
+  function buildStoreBar() {
+    const bar = $('storeBar');
+    const btns = ['<button data-store="all" class="on">全店</button>']
+      .concat(dash.stores.map((s) => `<button data-store="${s.id}">${esc(s.name)}</button>`));
+    bar.innerHTML = btns.join('');
+    bar.querySelectorAll('button').forEach((b) => {
+      b.onclick = () => {
+        curStore = b.dataset.store;
+        bar.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+        renderDashboard();
+      };
+    });
+  }
+
+  function storeName(id) {
+    const s = dash.stores.find((x) => String(x.id) === String(id));
+    return s ? s.name : '';
+  }
+
+  function renderDashboard() {
+    const now = new Date();
+    const yr = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const inStore = (sid) => curStore === 'all' || String(sid) === String(curStore);
+    const label = curStore === 'all' ? '全店' : storeName(curStore);
+
+    const mem = dash.members.filter((m) => inStore(m.home_store_id));
+    const bornBefore = (m) => Number(m.birth_date.slice(0, 4)) < yr;
+    const todayList = mem.filter((m) => m.birth_date.slice(5) === `${mm}-${dd}` && bornBefore(m));
+    const monthList = mem.filter((m) => m.birth_date.slice(5, 7) === mm && bornBefore(m));
+
+    $('tMembers').innerHTML = mem.length + '<small>名</small>';
+    $('tToday').innerHTML = todayList.length + '<small>名</small>';
+    $('tMonthLabel').textContent = `${now.getMonth() + 1}月の誕生日`;
+    $('tMonth').innerHTML = monthList.length + '<small>名</small>';
+
+    const logs = dash.logs.filter((l) => inStore(l.store_id));
+    $('tSent').innerHTML = logs.filter((l) => l.status === 'sent').length + '<small>通</small>';
+    $('tRedeemed').innerHTML = logs.filter((l) => l.redeemed_at).length + '<small>組</small>';
+
+    $('monthSummaryTitle').textContent = `${now.getMonth() + 1}月のご贔屓さん（${label}）`;
+    renderMonthSummary(monthList, yr);
+    renderInviteStatus();
+    renderSns();
+  }
+
+  function renderInviteStatus() {
+    const targets = curStore === 'all' ? dash.stores : dash.stores.filter((s) => String(s.id) === String(curStore));
+    const parts = targets.map((s) => {
+      const on = s.birthday_invite_config?.enabled;
+      return `${esc(s.name)}：<span class="statuspill ${on ? 'on' : 'off'}">${on ? '稼働中' : '停止中/未設定'}</span>`;
+    });
+    $('inviteStatus').innerHTML = '';
+    $('inviteDesc').innerHTML = parts.join('　');
+  }
+
+  function renderSns() {
+    const d = dash.social;
+    const box = $('snsBody');
+    // SNS自動投稿は現状 壽(店2) のみ。全店 or 壽 選択時に表示
+    if (!(curStore === 'all' || String(curStore) === String(SNS_STORE))) {
+      box.innerHTML = '<p class="muted">この店舗のSNS自動投稿はまだ設定されていません（現在は壽のみ）。</p>';
+      return;
+    }
+    if (!d || !d.total) {
+      box.innerHTML = '<p class="muted">本日はお誕生日の方がいらっしゃいません。</p>';
+      return;
+    }
+    const wl = d.weather
+      ? `本日は${d.mm}月${d.dd}日。京都は${d.weather.desc}、最高${d.weather.tmax}℃の予報です${d.weather.emoji}`
+      : `本日は${d.mm}月${d.dd}日。`;
+    const parts = d.counts.map(([p, n]) => `${p}から${n}名`);
+    const core = `本日、${parts.join('、')}、あわせて${d.total}名のご贔屓さんがお誕生日を迎えられます。\nおめでとうございます！素敵な一年になりますように🍶`;
+    const xText = `${wl}\n\n${core}\n\n#百年蕎麦壽 #誕生日おめでとう #京都グルメ #立ち呑み #蕎麦`;
+    const igText = `${wl}\n\n${core}\n\n壽で、素敵な一日を。\n.\n.\n#百年蕎麦壽 #誕生日おめでとう #HappyBirthday #京都グルメ #京都居酒屋 #立ち呑み #蕎麦 #そば #京都ディナー #誕生日`;
+    box.innerHTML = `
+      <div class="snsblock">
+        <div class="lbl"><span>X（旧Twitter）用</span><button class="copybtn" id="copyX">コピー</button></div>
+        <textarea readonly id="xArea"></textarea>
+      </div>
+      <div class="snsblock">
+        <div class="lbl"><span>Instagram用キャプション</span><button class="copybtn" id="copyIg">コピー</button></div>
+        <textarea readonly id="igArea"></textarea>
+      </div>
+      <a class="linkbtn" href="https://jishikawa1970.github.io/kotobuki/birthday/" target="_blank" rel="noopener">投稿画像を開く（スクショ用）</a>`;
+    $('xArea').value = xText;
+    $('igArea').value = igText;
+    copyBtn('copyX', xText);
+    copyBtn('copyIg', igText);
+  }
+
+  function renderMonthSummary(list, yr) {
+    if (!list.length) {
+      $('genderRatio').innerHTML = '<p class="muted">今月お誕生日の方はいません</p>';
+      $('ageBars').innerHTML = '';
+      return;
+    }
+    const ng = (g) => (g === '女' ? '女性' : g === '男' ? '男性' : (g || 'その他'));
+    let male = 0, female = 0, other = 0;
+    const ages = { '20代未満': 0, '20代': 0, '30代': 0, '40代': 0, '50代': 0, '60代': 0, '70代以上': 0 };
+    for (const m of list) {
+      const g = ng(m.gender);
+      if (g === '男性') male++; else if (g === '女性') female++; else other++;
+      const age = yr - Number(m.birth_date.slice(0, 4));
+      if (age < 20) ages['20代未満']++; else if (age >= 70) ages['70代以上']++;
+      else ages[`${Math.floor(age / 10) * 10}代`]++;
+    }
+    const total = list.length;
+    const pct = (n) => Math.round(n / total * 100);
+    $('genderRatio').innerHTML =
+      `<div class="ratio">
+        ${male ? `<span class="male" style="width:${pct(male)}%">男 ${male}</span>` : ''}
+        ${female ? `<span class="female" style="width:${pct(female)}%">女 ${female}</span>` : ''}
+        ${other ? `<span class="other" style="width:${pct(other)}%">他 ${other}</span>` : ''}
+      </div>`;
+    const maxAge = Math.max(...Object.values(ages));
+    $('ageBars').innerHTML = Object.entries(ages).filter(([, n]) => n > 0).map(([k, n]) =>
+      `<div class="bar"><span class="barlabel">${k}</span>
+        <span class="barfill" style="width:${maxAge ? Math.round(n / maxAge * 150) : 0}px"></span>
+        <span class="barnum">${n}名</span></div>`).join('');
+  }
+
+  // ---------- 会員の登録・編集 ----------
+  $('newMemberBtn').onclick = () => openEdit(null);
+  $('cancelBtn').onclick = () => $('memberDialog').close();
+  function openEdit(m) {
+    editingId = m?.id ?? null;
+    $('dialogTitle').textContent = m ? '会員の編集' : '会員の登録';
+    $('fName').value = m?.name ?? '';
+    $('fKana').value = m?.furigana ?? '';
+    $('fBirthday').value = m?.birth_date ?? '';
+    $('fEmail').value = m?.mail_address ?? '';
+    $('fNote').value = m?.nickname ?? '';
+    if (m) $('fStore').value = String(m.home_store_id);
+    $('memberDialog').showModal();
+  }
+  $('saveBtn').onclick = async () => {
+    const rec = {
+      name: $('fName').value.trim(),
+      furigana: $('fKana').value.trim() || null,
+      birth_date: $('fBirthday').value || null,
+      mail_address: $('fEmail').value.trim() || null,
+      home_store_id: Number($('fStore').value),
+      nickname: $('fNote').value.trim() || null,
+      updated_at: new Date().toISOString(),
+    };
+    if (!rec.name) return toast('名前は必須です');
+    const { error } = editingId
+      ? await sb.from('fg_patrons').update(rec).eq('id', editingId)
+      : await sb.from('fg_patrons').insert({ ...rec, is_deleted: false, created_at: new Date().toISOString() });
+    if (error) return toast('保存に失敗: ' + error.message);
+    $('memberDialog').close();
+    toast('保存しました');
+    await Promise.all([loadMembers(), loadBirthdays()]);
+  };
+
+  init();
+</script>
+</body>
+</html>
