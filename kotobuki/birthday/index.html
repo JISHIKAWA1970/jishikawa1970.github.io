@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>本日のお誕生日 — 百年蕎麦 壽</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    background:radial-gradient(130% 100% at 50% 0%,#28517a 0%,#1b3855 55%,#122535 100%);
+    color:#f4ecda;display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:8vh 8vw;text-align:center;position:relative;overflow:hidden;
+  }
+  body::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 85% 90%,rgba(214,164,90,.16) 0%,transparent 40%),
+    radial-gradient(circle at 12% 12%,rgba(214,164,90,.10) 0%,transparent 32%)}
+  .wrap{position:relative;z-index:1;width:100%;max-width:620px}
+  .seal{width:52px;height:52px;border:1.5px solid #d6a45a;border-radius:50%;color:#e6c48c;
+    display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px}
+  .brand{letter-spacing:.4em;color:#e6c48c;font-size:15px;margin-bottom:26px}
+  .date{color:#cdd9e6;font-size:17px;letter-spacing:.08em}
+  .weather{color:#a9c4dd;font-size:14px;margin-top:6px;min-height:1em}
+  .en{font-family:"Snell Roundhand","Brush Script MT",cursive;color:#e6c48c;
+    font-size:52px;line-height:1;margin:30px 0 22px}
+  .lead{font-size:15px;color:#e9dcc0;margin-bottom:16px;letter-spacing:.04em}
+  .n{font-size:22px;margin:6px 0;letter-spacing:.03em}
+  .n .pref{color:#f0d69b}
+  .n b{color:#f0d69b;font-size:1.15em;margin:0 2px}
+  .total{margin-top:22px;font-size:16px;color:#f4ecda}
+  .total b{color:#f0d69b;font-size:1.2em;margin:0 2px}
+  .foot{margin-top:26px;font-size:14px;color:#e9dcc0;letter-spacing:.05em}
+  .none{font-size:20px;color:#cdd9e6;margin-top:30px}
+  .loading{color:#a9c4dd;font-size:15px;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="seal">壽</div>
+  <div class="brand">百 年 蕎 麦 　 壽</div>
+  <div class="date" id="date"></div>
+  <div class="weather" id="weather"></div>
+  <div class="en">Happy Birthday</div>
+  <div id="body"><div class="loading">読み込み中…</div></div>
+</div>
+<script>
+  const API = 'https://vxdkrdxzlvygmhxoftzq.supabase.co/functions/v1/birthday-social';
+  const $ = (id) => document.getElementById(id);
+  fetch(API)
+    .then((r) => r.json())
+    .then((d) => {
+      $('date').textContent = `本日は ${d.mm}月${d.dd}日`;
+      if (d.weather) $('weather').textContent = `${d.weather.emoji} 京都は${d.weather.desc}・最高${d.weather.tmax}℃`;
+      if (!d.total) {
+        $('body').innerHTML = '<div class="none">本日はお誕生日の方が<br>いらっしゃいません</div>';
+        return;
+      }
+      const rows = d.counts.map(([p, n]) =>
+        `<div class="n"><span class="pref">${p}</span> から <b>${n}</b> 名</div>`).join('');
+      $('body').innerHTML =
+        `<div class="lead">本日お誕生日を迎えられるのは…</div>${rows}` +
+        `<div class="total">あわせて <b>${d.total}</b> 名さま、おめでとうございます！</div>` +
+        `<div class="foot">素敵な一年になりますように 🍶</div>`;
+    })
+    .catch(() => {
+      $('body').innerHTML = '<div class="none">読み込みに失敗しました<br>時間をおいて再読み込みしてください</div>';
+    });
+</script>
+</body>
+</html>
