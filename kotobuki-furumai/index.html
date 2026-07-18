@@ -21,10 +21,18 @@
     "@context":"https://schema.org",
     "@type":"WebPage",
     "name":"壽振る舞い",
-    "description":"百年蕎麦 壽がプレオープン一周年を機に始めた誕生日のご招待",
+    "description":"百年蕎麦 壽が2026年7月21日の一周年を機に始めた誕生日のご招待",
     "inLanguage":"ja",
     "isPartOf":{"@type":"WebSite","name":"百年蕎麦 壽"}
   }
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV642M4X53"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PV642M4X53');
   </script>
   <style>
     :root{
@@ -83,7 +91,7 @@
     .closing .big{font-size:clamp(1.45rem,4.8vw,2.15rem);line-height:1.8;letter-spacing:.08em}
     footer{padding:34px 24px;text-align:center;color:#cbc2b1;background:var(--deep);font-size:.8rem}
     @media(min-width:720px){main{padding-left:60px;padding-right:60px}.gift-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:560px){body{line-height:1.9}.hero{min-height:74svh;padding:56px 22px 50px}.mon{width:62px;height:62px}.hero h1{letter-spacing:.12em}main{padding-left:30px;padding-right:30px}section{padding:62px 0}.statement{margin-left:0;margin-right:0;padding:32px 24px}.rule{padding:28px 24px}.rule dl{grid-template-columns:1fr;gap:4px}.rule dd{margin-bottom:14px}.step{padding-left:70px}.gift,.step,.scene-list li{border-radius:2px}}
+    @media(max-width:560px){body{line-height:1.85}.hero{min-height:74svh;padding:56px 20px 50px}.mon{width:62px;height:62px}.hero h1{letter-spacing:.12em}main{padding-left:20px;padding-right:20px}section{padding:58px 0}.statement{margin-left:-20px;margin-right:-20px;padding:32px 20px}.rule{padding:28px 22px}.rule dl{grid-template-columns:1fr;gap:4px}.rule dd{margin-bottom:14px}.step{padding-left:70px}}
     @media(prefers-reduced-motion:no-preference){.hero-inner{animation:rise .9s ease-out both}@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}}
     @media print{body{background:#fff}.page{box-shadow:none}.hero{min-height:auto}.hero-inner{animation:none}section{break-inside:avoid}}
   </style>
@@ -189,5 +197,45 @@
 
   <footer>© 2026 百年蕎麦 壽<br>立ち酒、〆蕎麦。</footer>
 </article>
+
+<script>
+(function () {
+  var sent90 = false;
+
+  function sendScrollDepth() {
+    if (sent90 || typeof gtag !== 'function') return;
+    var doc = document.documentElement;
+    var scrollable = doc.scrollHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+    var depth = (window.scrollY / scrollable) * 100;
+
+    if (depth >= 90) {
+      sent90 = true;
+      gtag('event', 'furumai_scroll_90', {
+        event_category: 'engagement',
+        event_label: 'kotobuki_furumai',
+        value: 90
+      });
+    }
+  }
+
+  window.addEventListener('scroll', sendScrollDepth, { passive: true });
+  window.addEventListener('load', sendScrollDepth);
+
+  var params = new URLSearchParams(window.location.search);
+  var source = params.get('utm_source');
+  var medium = params.get('utm_medium');
+  var campaign = params.get('utm_campaign');
+
+  if (source || medium || campaign) {
+    gtag('event', 'furumai_campaign_visit', {
+      campaign_source: source || '(not set)',
+      campaign_medium: medium || '(not set)',
+      campaign_name: campaign || '(not set)'
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
