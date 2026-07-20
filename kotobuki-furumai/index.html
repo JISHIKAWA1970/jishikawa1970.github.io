@@ -56,5 +56,24 @@
 <script>
 (function(){var sent90=false;function sendScrollDepth(){if(sent90||typeof gtag!=='function')return;var doc=document.documentElement;var scrollable=doc.scrollHeight-window.innerHeight;if(scrollable<=0)return;var depth=(window.scrollY/scrollable)*100;if(depth>=90){sent90=true;gtag('event','furumai_scroll_90',{event_category:'engagement',event_label:'kotobuki_furumai',value:90});}}window.addEventListener('scroll',sendScrollDepth,{passive:true});window.addEventListener('load',sendScrollDepth);var params=new URLSearchParams(window.location.search);var source=params.get('utm_source');var medium=params.get('utm_medium');var campaign=params.get('utm_campaign');if(source||medium||campaign){gtag('event','furumai_campaign_visit',{campaign_source:source||'(not set)',campaign_medium:medium||'(not set)',campaign_name:campaign||'(not set)'});}})();
 </script>
+<script>
+  (function(){
+    try {
+      var src = new URLSearchParams(window.location.search).get('src') || 'direct';
+      fetch('https://vxdkrdxzlvygmhxoftzq.supabase.co/rest/v1/furumai_views', {
+        method: 'POST',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4ZGtyZHh6bHZ5Z21oeG9mdHpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTYwNDAsImV4cCI6MjA4NTk3MjA0MH0.y4O0AFYkrgVb7BxyY33pW9Szq6Ez-z5ITcUTGt3_MLA',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          src: src,
+          referrer: document.referrer || null,
+          user_agent: navigator.userAgent
+        })
+      }).catch(function(){});
+    } catch (e) {}
+  })();
+</script>
 </body>
 </html>
